@@ -59,8 +59,8 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.aboutInvitation.setText(invitations.get(position).getDescription());
-        holder.timeStartText.setText(invitations.get(position).getStart_time());
-        holder.timeLeftText.setText(invitations.get(position).getResponse_deadline());
+        holder.timeStartText.setText("Starts at " + invitations.get(position).getStart_time());
+        holder.timeLeftText.setText("RSVP by " + invitations.get(position).getResponse_deadline());
         if(invitations.get(position).getStatus() == 1)
             holder.acceptInvitation.setChecked(true);
         else

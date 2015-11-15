@@ -19,15 +19,26 @@ public class Attendee implements Parcelable {
 
     String email;
 
-    public Attendee(String name, String email) {
+    public Attendee(String name, String email,int id) {
         this.name = name;
         this.email = email;
+        this.id = id;
     }
 
     protected Attendee(Parcel in) {
         name = in.readString();
         email = in.readString();
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    int id;
 
     @Override
     public int describeContents() {
@@ -56,5 +67,15 @@ public class Attendee implements Parcelable {
     @Override
     public String toString(){
         return name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Attendee) {
+            if (((Attendee) obj).getId() == id)
+                return true;
+            return false;
+        }
+        return false;
     }
 }

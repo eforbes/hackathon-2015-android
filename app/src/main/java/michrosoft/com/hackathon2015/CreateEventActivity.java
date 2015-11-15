@@ -1,5 +1,8 @@
 package michrosoft.com.hackathon2015;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -9,9 +12,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+
+import org.json.JSONObject;
 
 import java.util.Calendar;
 
@@ -29,14 +40,20 @@ public class CreateEventActivity extends AppCompatActivity implements TimePicker
     @Bind(R.id.set_deadline_time) Button setDeadlineTime;
     @Bind(R.id.deadline_time) TextView deadlineTime;
     @Bind(R.id.deadline_date) TextView deadlineDate;
-    @Bind(R.id.minimum_people)
-    EditText minimum_number_people_picker;
+    @Bind(R.id.minimum_people) EditText minimum_number_people_picker;
+    @Bind(R.id.event_title) EditText eventTitle;
+    @Bind(R.id.event_location) EditText eventLocation;
+    @Bind(R.id.description) EditText description;
+
+
     String startTimePickerTag = "startTimePicker";
     String startDatePickerTag = "startDatePicker";
     String deadlineTimePickerTag = "deadlineTimePicker";
     String deadlineDatePickerTag = "deadlineDatePicker";
     boolean startTimePickerOpen = false;
     boolean deadlineTimePickerOpen = false;
+    RequestQueue requestQueue;
+    int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +63,12 @@ public class CreateEventActivity extends AppCompatActivity implements TimePicker
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Bundle extras = getIntent().getExtras();
+        if(extras.containsKey("id")) {
+            id = extras.getInt("id");
+        }
+        requestQueue = Volley.newRequestQueue(this);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,12 +137,12 @@ public class CreateEventActivity extends AppCompatActivity implements TimePicker
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         if(view.getTag().equals(deadlineDatePickerTag)) {
-            deadlineDate.setText(monthOfYear + "/" + dayOfMonth + "/" + year);
+            deadlineDate.setText(monthOfYear + "-" + dayOfMonth + "-" + year);
         }
         else if(view.getTag().equals(startDatePickerTag)) {
-            startDate.setText(monthOfYear+ "/" + dayOfMonth  + "/" + year);
+            startDate.setText(monthOfYear+ "-" + dayOfMonth  + "-" + year);
         }
-        Log.d("tag","You picked the following date: "+dayOfMonth+"/"+(monthOfYear+1)+"/"+year);
+        Log.d("tag", "You picked the following date: " + dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
     }
 
 
@@ -129,10 +150,25 @@ public class CreateEventActivity extends AppCompatActivity implements TimePicker
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
 
         if(deadlineTimePickerOpen) {
-            deadlineTime.setText(hourOfDay + ":" + minute);
+            String amPm = "AM";
+            if(hourOfDay >= 12) {
+
+                amPm = "PM";
+            }
+            hourOfDay = hourOfDay%12;
+            if(hourOfDay == 0)
+                hourOfDay = 12;
+            deadlineTime.setText(hourOfDay + ":" + minute + amPm);
         }
         else if(startTimePickerOpen) {
-            startTime.setText(hourOfDay + ":" + minute);
+            String amPm = "AM";
+
+            if(hourOfDay >= 12)
+                amPm = "PM";
+            hourOfDay = hourOfDay%12;
+            if(hourOfDay == 0)
+                hourOfDay = 12;
+            startTime.setText(hourOfDay + ":" + minute+amPm);
         }
         deadlineTimePickerOpen = false;
         startTimePickerOpen = false;
@@ -142,6 +178,64 @@ public class CreateEventActivity extends AppCompatActivity implements TimePicker
 
     @OnClick(R.id.create_event)
     public void createEvent() {
+        createEvent(id, eventTitle.getText().toString(), description.getText().toString(), eventLocation.getText().toString(), startDate.getText().toString(), startTime.getText().toString(), deadlineDate.getText().toString(), deadlineTime.getText().toString(), minimum_number_people_picker.getText().toString());
+    }
+    //11/15
+    //m-d-yyyy
+    //H:MMam/pm
+    // /events/secureCreateEvent/ id:my id, title:title, description, location, startdate, starttime, responsedate, responsetime , minimumattend(optional)
+    private void createEvent(int id2, String title, String description, String location, String startDate, String startTime, String responseDate, String responseTime, String minimumAttendance) {
+        try {
+            JSONObject jsObj = new JSONObject();
+            jsObj.put("id", id2+"");
+            jsObj.put("title", title);
+            jsObj.put("description", description);
+            jsObj.put("location", location);
+            jsObj.put("start_date", startDate);
+            jsObj.put("start_time", startTime);
+            jsObj.put("response_date", responseDate);
+            jsObj.put("response_time", responseTime);
+            jsObj.put("minimum_attendance", minimumAttendance);
+            JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                    (Request.Method.POST, "http://michael.evanforbes.net:3000/events/secureCreateEvent", jsObj, new Response.Listener<JSONObject>() {
 
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                Log.d("tag", "got response");
+                                Intent main = new Intent(CreateEventActivity.this, MainActivity.class);
+                                main.putExtra("id", id);
+                                startActivity(main);
+                            }catch (Exception ex) {
+                                Log.e("login", "error getting key from response " + ex.toString());
+                                showError();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("login", error.toString() + ", " );
+                            error.printStackTrace();
+                        }
+                    });
+            requestQueue.add(jsObjRequest);
+        }
+        catch(Exception ex) {
+            Log.e("login", "exception creating jsobj" + ex.toString());
+            showError();
+        }
+    }
+    public void showError() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setNeutralButton("Okay", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setTitle("Login Error");
+        builder.setMessage("Could not login to the service. App will exit.");
+        builder.create().show();
     }
 }

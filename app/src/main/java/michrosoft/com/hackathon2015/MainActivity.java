@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent viewInvitationEvent = new Intent(getBaseContext(), CreateEventActivity.class);
+                viewInvitationEvent.putExtra("id", id);
                 startActivity(viewInvitationEvent);
             }
         });

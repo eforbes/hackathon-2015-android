@@ -112,8 +112,8 @@ public class Invitation implements Parcelable {
 
     private boolean accepted = false;
     public Invitation() {
-        attendees.add(new Attendee("David Albers", "davidgeorgea@gmail.com"));
-        attendees.add(new Attendee("Will Smith", "mink.cv@gmail.com"));
+        attendees.add(new Attendee("David Albers", "davidgeorgea@gmail.com",0));
+        attendees.add(new Attendee("Will Smith", "mink.cv@gmail.com",1));
     }
 
     public Invitation(JSONObject jsObj) {
