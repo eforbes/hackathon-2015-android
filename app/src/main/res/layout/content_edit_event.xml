@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="5dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_main" tools:context=".MainActivity">
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/accept_switch_text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/accept_invitation"
+        android:checked="false"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/about_invitation"
+        android:text="@string/invitation_dummy_info" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/view_invitation_dummy_start_time"
+        android:id="@+id/invitation_time_start"
+        android:layout_below="@id/about_invitation"
+        android:layout_alignParentLeft="true"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/view_invitation_dummy_time_left"
+        android:id="@+id/invitation_time_left"
+        android:layout_alignTop="@+id/invitation_time_start"
+        android:layout_toEndOf="@+id/invitation_time_start"
+        android:layout_marginLeft="10dp"/>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_attendee"
+        android:id="@+id/add_attendee"
+        android:layout_below="@+id/invitation_time_left"
+
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/done_editing_invitation"
+        android:id="@+id/done_editing"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"/>
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/attendee_list"
+        android:layout_below="@id/add_attendee"
+        android:layout_alignParentLeft="true"
+        android:layout_above="@id/done_editing"
+     />
+
+
+
+
+
+</RelativeLayout>

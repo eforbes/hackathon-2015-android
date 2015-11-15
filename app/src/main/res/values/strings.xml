@@ -1,4 +1,28 @@
 <resources>
     <string name="app_name">Hackathon2015</string>
     <string name="action_settings">Settings</string>
+    <string name="accept_switch_text">I\'m in!</string>
+    <string name="invitation_dummy_info">Lets x at y</string>
+    <string name="invitation_dummy_time_start">6:00pm</string>
+    <string name="invitation_dummy_time_left">30 mins left</string>
+    <string name="invitation_dummy_other_attendees">David, Will, Evan and 3 others</string>
+    <string name="title_activity_edit_event">EditEventActivity</string>
+    <string name="dummy_view_all_attendees">David, Will, Michael, Evan, Steve are attending</string>
+    <string name="view_invitation_dummy_other_attendees">Will, David, Evan, Michael, Steve, Buchheim are also attending</string>
+    <string name="add_attendee">+ Person</string>
+    <string name="done_editing_invitation">Done</string>
+    <string name="view_invitation_dummy_start_time">Starts at 6:00pm</string>
+    <string name="view_invitation_dummy_time_left">RSVP in 30 mins</string>
+    <string name="title_activity_create_event">CreateEventActivity</string>
+    <string name="event_title">Title</string>
+    <string name="event_location_hint">Location</string>
+    <string name="set_time">Set Time</string>
+    <string name="set_date">Set Date</string>
+    <string name="new_event_accept_deadline">Deadline</string>
+    <string name="new_event_start_time">Start Time</string>
+    <string name="new_event_description_hint">A short description of the event</string>
+    <string name="create_new_event">Create Event</string>
+    <string name="minimum_number_of_people_label">Minimum Number of People:</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="login_info">This app uses your Google Account to login. Click to button below to get started.</string>
 </resources>
